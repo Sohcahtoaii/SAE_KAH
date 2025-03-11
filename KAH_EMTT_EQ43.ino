@@ -5,7 +5,7 @@
 // Version : x                                                                                                                  //
 /*************************************************************************************************************************************/
 
-// inclusion des fichiers header des bibliothèques de fonctions Arduino
+// inclusion des fichiers hearrder des bibliothèques de fonctions Arduino
 #include <stdint.h>
 #include <arduino.h>
 #include "NEC.h"
