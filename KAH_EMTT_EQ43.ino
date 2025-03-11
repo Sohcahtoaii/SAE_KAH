@@ -5,7 +5,7 @@
 // Version : x                                                                                                                  //
 /*************************************************************************************************************************************/
 
-// inclusion des fichiers hearrder des bibliothèques de fonctions Arduino
+// inclusion des fichiers header des bibliothèques de fonctions Arduino
 #include <stdint.h>
 #include <arduino.h>
 #include "NEC.h"
@@ -26,8 +26,8 @@ uint16_t AcquerirPotentiometreVitesse(void) {     // retourne une valeur : [ ? ;
 }
 
 uint16_t AcquerirPotentiometreDirection(void) {   // retourne une valeur : [ ? ; ? ]
-               // à compléter
-  return ... ;    // à compléter
+  uint16_t Aq_direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 2);             // à compléter
+  return direction ;    // à compléter
 }
 
 uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché), 1 (BP enfoncé)
@@ -38,8 +38,9 @@ uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché),
 
 // definition des fonctions de traitement
 uint8_t CalculerDonneeNEC(uint16_t Vitesse, uint16_t Direction) { // retourne un octet (8 bits) : Vitesse sur les 4 MSB, Direction sur les 4 LSB
-//  ...             // à compléter
-//  return ... ;    // à compléter
+  Direction = map(Aq_direction, -100, 100, 0, 31); 
+  int Donnee = (Vitesse << 3) | Direction;          // à compléter
+  return Donnee ;    // à compléter+
 }
 
 // definition des fonctions de traitement
