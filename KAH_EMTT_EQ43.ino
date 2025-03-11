@@ -26,7 +26,7 @@ uint16_t AcquerirPotentiometreVitesse(void) {     // retourne une valeur : [ ? ;
 }
 
 uint16_t AcquerirPotentiometreDirection(void) {   // retourne une valeur : [ ? ; ? ]
-  uint16_t Aq_direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 2);             // à compléter
+  uint16_t Aq_direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, -100, 100);             // à compléter
   return direction ;    // à compléter
 }
 
