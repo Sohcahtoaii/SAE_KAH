@@ -32,7 +32,6 @@ uint16_t AcquerirPotentiometreDirection(void) {   // retourne une valeur : [ ? ;
 
 uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché), 1 (BP enfoncé)
    return(digitalRead(BoutonPoussoir_Pin);
-
 }
 
 
@@ -45,8 +44,8 @@ uint8_t CalculerDonneeNEC(uint16_t Vitesse, uint16_t Direction) { // retourne un
 
 // definition des fonctions de traitement
 uint8_t CalculerAdresseNEC(uint8_t Klaxon) { // retourne un octet (8 bits) : Klaxon sur le MSB, NumeroEquipe sur les 7 LSB
-//  ...             // à compléter
-//  return ... ;    // à compléter
+//  int Adresse = (Klaxon << 7) | (NumeroEquipe & 0x7F)
+//  return Adresse ;    // à compléter
 }
 
 // definition des fonctions d'action
