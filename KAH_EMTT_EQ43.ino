@@ -21,18 +21,18 @@
 
 // definition des fonctions d'acquisition
 uint16_t AcquerirPotentiometreVitesse(void) {     // retourne une valeur : [ ? ; ? ]
-//  ...             // à compléter
-//  return ... ;    // à compléter
+  return(analogRead(PotentiometreVitesse_Pin);
+
 }
 
 uint16_t AcquerirPotentiometreDirection(void) {   // retourne une valeur : [ ? ; ? ]
-  uint16_t direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 2);             // à compléter
-  return direction ;    // à compléter
+               // à compléter
+  return ... ;    // à compléter
 }
 
 uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché), 1 (BP enfoncé)
-//  ...             // à compléter
-//  return ... ;    // à compléter
+   return(digitalRead(BoutonPoussoir_Pin);
+
 }
 
 
