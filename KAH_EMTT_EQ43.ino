@@ -38,14 +38,14 @@ uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché),
 // definition des fonctions de traitement
 uint8_t CalculerDonneeNEC(uint16_t Vitesse, uint16_t Direction) { // retourne un octet (8 bits) : Vitesse sur les 4 MSB, Direction sur les 4 LSB
   Direction = map(Aq_direction, -100, 100, 0, 31); 
-  int Donnee = (Vitesse << 3) | Direction;          // à compléter
+  int Donnee = (Vitesse << 3) | Direction;   
   return Donnee ;    // à compléter+
 }
 
 // definition des fonctions de traitement
 uint8_t CalculerAdresseNEC(uint8_t Klaxon) { // retourne un octet (8 bits) : Klaxon sur le MSB, NumeroEquipe sur les 7 LSB
-//  int Adresse = (Klaxon << 7) | (NumeroEquipe & 0x7F)
-//  return Adresse ;    // à compléter
+  int Adresse = (Klaxon << 7) | (NumeroEquipe & 0x7F)
+  return Adresse ;   
 }
 
 // definition des fonctions d'action
