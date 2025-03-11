@@ -26,8 +26,8 @@ uint16_t AcquerirPotentiometreVitesse(void) {     // retourne une valeur : [ ? ;
 }
 
 uint16_t AcquerirPotentiometreDirection(void) {   // retourne une valeur : [ ? ; ? ]
-  uint16_t vitesse = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 3);             // à compléter
-  return vitesse ;    // à compléter
+  uint16_t direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 2);             // à compléter
+  return direction ;    // à compléter
 }
 
 uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché), 1 (BP enfoncé)
