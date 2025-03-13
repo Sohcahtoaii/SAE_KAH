@@ -65,7 +65,15 @@ else{
 }
   
 }
+void PiloterLedInfrarouge(uint8_t numer_led, char etat){
 
+if(etat == 0){
+  digitalWrite(LEDInfrarouge_Pin,LOW);
+}
+if(etat == 1){
+  digitalWrite(LEDInfrarouge_Pin,HIGH);
+}
+}
 
 
 
