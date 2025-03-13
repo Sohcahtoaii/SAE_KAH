@@ -56,6 +56,17 @@ uint8_t CalculerAdresseNEC(uint8_t Klaxon) { // retourne un octet (8 bits) : Kla
 
 // definition des fonctions d'action
                     // inclus dans la bibliothèque NEC
+void PiloterLedMarche(uint8_t etat){ //active ou non la LED: 0 = éteint; 1 = allumé
+if (etat == 0){
+  digitalWrite(LEDInfrarouge_Pin, LOW);
+}
+else{
+  digitalWrite(LEDInfrarouge_Pin, HIGH);
+}
+  
+}
+
+
 
 
 // definition des fonctions principales
