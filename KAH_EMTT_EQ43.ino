@@ -2,7 +2,7 @@
 // Sujet :   Programme de l'émetteur du projet KAH                                                                                   //
 // Equipe :  xxxxxxx                                                                                                                    //
 // Date :    xx/xx/xxxx                                                                                                              //
-// Version : x                                                                                                                  //
+// Version : 1                                                                                                                  //
 /*************************************************************************************************************************************/
 
 // inclusion des fichiers header des bibliothèques de fonctions Arduino
