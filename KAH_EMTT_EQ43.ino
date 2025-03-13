@@ -10,7 +10,6 @@
 #include <arduino.h>
 #include "NEC.h"
 
-
 // definition des constantes du projet
 #define PotentiometreVitesse_Pin     A0       // à modifier
 #define PotentiometreDirection_Pin   A1       // à modifier
@@ -21,30 +20,37 @@
 
 // definition des fonctions d'acquisition
 uint16_t AcquerirPotentiometreVitesse(void) {     // retourne une valeur : [ ? ; ? ]
-  return(analogRead(PotentiometreVitesse_Pin);
+  return(analogRead(PotentiometreVitesse_Pin));
 
 }
 
 uint16_t AcquerirPotentiometreDirection(void) {   // retourne une valeur : [ ? ; ? ]
-  uint16_t Aq_direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, -100, 100);             // à compléter
-  return direction ;    // à compléter
+  uint16_t Aq_direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 31);             // à compléter
+  return Aq_direction;    // à compléter
 }
 
 uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché), 1 (BP enfoncé)
-   return(digitalRead(BoutonPoussoir_Pin);
+   return(digitalRead(BoutonPoussoir_Pin));
 }
 
 
 // definition des fonctions de traitement
-uint8_t CalculerDonneeNEC(uint16_t Vitesse, uint16_t Direction) { // retourne un octet (8 bits) : Vitesse sur les 3 MSB, Direction sur les 5 LSB
-  Direction = map(Aq_direction, -100, 100, 0, 31); 
-  int Donnee = (Vitesse << 5) | (Direction & 0x1F);   
+uint8_t CalculerDonneeNEC(uint16_t Vitesse, uint16_t Direction) { 
+  static int Donnee[8] = {0};// retourne un octet (8 bits) : Vitesse sur les 3 MSB, Direction sur les 5 LSB 
+  int drctin = (Vitesse << 5) | (Direction & 0x1F);
+  for (int i = 7; i >= 0; i--) {
+    Donnee[i] = ((drctin >> i) & 1);
+  }
   return Donnee ;    // à compléter+
 }
 
 // definition des fonctions de traitement
 uint8_t CalculerAdresseNEC(uint8_t Klaxon) { // retourne un octet (8 bits) : Klaxon sur le MSB, NumeroEquipe sur les 7 LSB
-  int Adresse = (Klaxon << 7) | (NumeroEquipe & 0x7F)
+  static int Adresse[8] = {0};
+  int adrss = (Klaxon << 7) | (NumeroEquipe & 0x7F);
+  for (int i = 7; i >= 0; i--) {
+    Adresse[i] = ((adrss >> i) & 1);
+  }
   return Adresse ;   
 }
 
@@ -54,14 +60,15 @@ uint8_t CalculerAdresseNEC(uint8_t Klaxon) { // retourne un octet (8 bits) : Kla
 
 // definition des fonctions principales
 void setup(void) {
-//  ...             // à compléter
+  Serial.begin(9600);
+// à compléter
 }
 
 void loop(void) {
-  uint16_t Vitesse;
-  uint16_t Direction;
+  uint16_t Vitesse = AcquerirPotentiometreVitesse();
+  uint16_t Direction = AcquerirPotentiometreDirection();
   uint8_t Klaxon;
-  uint8_t DonneeNEC;
-  uint8_t AdresseNEC;
+  uint8_t DonneeNEC =  CalculerDonneeNEC(Vitesse,Direction);
+  uint8_t AdresseNEC = CalculerAdresseNEC(Klaxon);
 //  ...             // à compléter
 }
