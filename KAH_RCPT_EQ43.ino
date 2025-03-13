@@ -50,7 +50,7 @@ uint8_t ExtraireEtatBuzzer(uint8_t Adresse) { // retourne : 0 (inactif), 1 (acti
 
 // definition des fonctions d'action
 void PiloterServomoteur(uint8_t Direction) { // génère un signal PWM
-//  ...             // à compléter
+//                  // à compléter
 //  return ... ;    // à compléter
 }
 
@@ -60,7 +60,8 @@ void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
 }
 
 void PiloterBuzzer(uint8_t EtatBuzzer) { // génère un signal carré à 4kHz si EtatBuzzer = 1
-//  ...             // à compléter
+//  if (Buzzer_Pin == 1){ // à compléter
+// pwm.write // à compléter
 //  return ... ;    // à compléter
 }
 
