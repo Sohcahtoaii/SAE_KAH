@@ -1,8 +1,8 @@
 /*************************************************************************************************************************************/
 // Sujet :   Programme de l'émetteur du projet KAH                                                                                   //
-// Equipe :  EQ43                                                                                                                //
+// Equipe :  EQ43                                                                                                                    //
 // Date :    xx/xx/xxxx                                                                                                              //
-// Version : 1                                                                                                                  //
+// Version : 1                                                                                                                       //
 /*************************************************************************************************************************************/
 
 // inclusion des fichiers header des bibliothèques de fonctions Arduino
@@ -14,7 +14,7 @@
 // definition des constantes du projet
 #define Servomoteur_Pin               5       // à modifier
 #define Moteur_Pin                    6       // à modifier
-#define Buzzer_Pin                   11       // à modifier
+#define Buzzer_Pin                    11       // à modifier
 #define LedBleue_Pin                 10       // à modifier
 #define NumeroEquipe               0x52       // à modifier
 
