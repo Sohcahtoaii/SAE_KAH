@@ -60,14 +60,21 @@ void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
 }
 
 void PiloterBuzzer(uint8_t EtatBuzzer) { // génère un signal carré à 4kHz si EtatBuzzer = 1
-// if (EtatBuzzer == 1){ // à compléter
-// tone(4000)  // à compléter
-//  return;    // à compléter
+if (EtatBuzzer == 1){
+  tone(11,4000);
+  }
+else {
+  noTone();
+return;
 }
 
 void PiloterLedBleue(uint8_t EtatLedBleue) { // génère un signal binaire
-//  ...             // à compléter
-//  return ... ;    // à compléter
+if (EtatLedBleue == 1){
+  digitalWrite(
+  }
+else {
+  noTone();
+return;
 }
 
 
