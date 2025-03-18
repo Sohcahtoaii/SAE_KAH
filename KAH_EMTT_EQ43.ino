@@ -82,11 +82,16 @@ for( int i; i<=8 ;i--){
   delay();
   digitalWrite(LEDInfrarouge_Pin,LOW);
   delay();
-
-void PiloterBuzzer(uint16_t frequence){
-if (frequence<= 4100 || frequence >= 3900){
-  tone(Buzzer_Pin, frequence);        //ETEINDRE LE BUZZER DANS LE LOOP
 }
+}
+
+void PiloterBuzzer(uint16_t etat){
+if (etat == 0){
+  return 1;        //ETEINDRE LE BUZZER DANS LE LOOP
+}
+  else{
+  return 0;
+  }
 }
 
 // definition des fonctions principales
