@@ -75,7 +75,11 @@ if(etat == 1){
 }
 }
 
-
+void piloterBuzzer(uint16_t frequence){
+if (frequence<= 4100 || frequence >= 3900){
+analogWrite(
+}
+}
 
 // definition des fonctions principales
 void setup(void) {
