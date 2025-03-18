@@ -14,8 +14,9 @@
 // definition des constantes du projet
 #define Servomoteur_Pin               5       // à modifier
 #define Moteur_Pin                    6       // à modifier
-#define Buzzer_Pin                   11       // à modifier
-#define LedBleue_Pin                 10       // à modifier
+#define Buzzer_Pin                   11
+#define LedBleue_Pin                  4
+#define LedVerte_Pin                  6
 #define NumeroEquipe               0x52       // à modifier
 
 
@@ -70,13 +71,21 @@ return;
 
 void PiloterLedBleue(uint8_t EtatLedBleue) { // génère un signal binaire
 if (EtatLedBleue == 1){
-  digitalWrite(
+  digitalWrite(4,LOW);
   }
 else {
-  noTone();
+  digitalWrite(4,HIGH);
 return;
 }
 
+void PiloterLedVerte(uint8_t EtatLedBleue) { // génère un signal binaire
+if (EtatLedBleue == 1){
+  digitalWrite(6,LOW);
+  }
+else {
+  digitalWrite(6,HIGH);
+return;
+}
 
 // definition des fonctions principales
 void setup(void) {
