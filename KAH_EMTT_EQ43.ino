@@ -31,7 +31,7 @@ uint16_t AcquerirPotentiometreDirection(void) {
 
 // Fonction pour obtenir l'état du bouton poussoir
 uint8_t AcquerirBoutonPoussoir() {
-  // Retourne 0 si le bouton est enfoncé, 1 si le bouton est relâché
+  // Retourne 1 si le bouton est enfoncé, 0 si le bouton est relâché
   if (digitalRead(BoutonPoussoir_Pin) == 1) {
     return 0;  // Le bouton est relâché
   } else {
