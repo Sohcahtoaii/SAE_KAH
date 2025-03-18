@@ -12,10 +12,11 @@
 
 
 // definition des constantes du projet
-#define Servomoteur_Pin               5       // à modifier
-#define Moteur_Pin                    6       // à modifier
-#define Buzzer_Pin                    11       // à modifier
-#define LedBleue_Pin                 10       // à modifier
+#define Servomoteur_Pin              12
+#define Moteur_Pin                    5
+#define Buzzer_Pin                   11
+#define LedBleue_Pin                  4
+#define LedVerte_Pin                  6
 #define NumeroEquipe               0x52       // à modifier
 
 
@@ -60,16 +61,27 @@ void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
 }
 
 void PiloterBuzzer(uint8_t EtatBuzzer) { // génère un signal carré à 4kHz si EtatBuzzer = 1
-// if (EtatBuzzer == 1){ // à compléter
-// tone(4000)  // à compléter
-//  return ... ;    // à compléter
+if (EtatBuzzer == 1){
+  tone(11,4000);
+  }
+else {
+  noTone();
+return;
 }
 
 void PiloterLedBleue(uint8_t EtatLedBleue) { // génère un signal binaire
-//  ...             // à compléter
-//  return ... ;    // à compléter
+if (EtatLedBleue == 1){
+  digitalWrite(4,LOW);
+  }
+else {
+  digitalWrite(4,HIGH);
+return;
 }
 
+void PiloterLedVerte(uint8_t EtatLedVerte) { // génère un signal binaire
+digitalWrite(6,LOW);
+return;
+}
 
 // definition des fonctions principales
 void setup(void) {

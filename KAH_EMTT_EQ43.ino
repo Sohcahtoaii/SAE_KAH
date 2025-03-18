@@ -5,101 +5,98 @@
 // Version : 1                                                                                                                  //
 /*************************************************************************************************************************************/
 
-// inclusion des fichiers header des bibliothèques de fonctions Arduino
-#include <stdint.h>
-#include <arduino.h>
-#include "NEC.h"
+// Inclusion des fichiers header des bibliothèques de fonctions Arduino
+#include <stdint.h>         // Permet d'utiliser des types de données entiers avec des tailles spécifiques comme uint8_t (8 bits), uint16_t (16 bits), etc.
+#include <arduino.h>        // La bibliothèque de base Arduino qui inclut des fonctions comme analogRead, digitalRead, etc.
+#include "NEC.h"            // Inclusion d'un fichier d'entête spécifique au protocole NEC (probablement pour la gestion de l'envoi infrarouge NEC)
 
-// definition des constantes du projet
-#define PotentiometreVitesse_Pin     A0       // à modifier
-#define PotentiometreDirection_Pin   A1       // à modifier
-#define BoutonPoussoir_Pin            8       // à modifier
-#define LEDInfrarouge_Pin             9       // à modifier
-#define Buzzer_Pin                           // à modifier
-#define NumeroEquipe               0x52       // à modifier
+// Définition des constantes du projet
+#define PotentiometreVitesse_Pin     A0       // Pin analogique A0 pour le potentiomètre de la vitesse (à modifier selon le câblage)
+#define PotentiometreDirection_Pin   A1       // Pin analogique A1 pour le potentiomètre de la direction (à modifier selon le câblage)
+#define BoutonPoussoir_Pin           8        // Pin numérique 8 pour le bouton poussoir (à modifier si nécessaire)
+#define LEDInfrarouge_Pin            9        // Pin numérique 9 pour la LED infrarouge (à modifier selon la configuration du projet)
+#define NumeroEquipe                 0x52     // Identifiant unique de l'équipe (0x52 en hexadécimal, à personnaliser)
 
-
-// definition des fonctions d'acquisition
-uint16_t AcquerirPotentiometreVitesse(void) {     // retourne une valeur : [ ? ; ? ]
-  return(analogRead(PotentiometreVitesse_Pin));
-
+// Définition des fonctions d'acquisition
+// Fonction pour obtenir la valeur du potentiomètre de la vitesse
+uint16_t AcquerirPotentiometreVitesse(void) {     
+  return(analogRead(PotentiometreVitesse_Pin));  // Lit la valeur analogique sur la pin A0 et retourne la valeur lue (de 0 à 1023)
 }
 
-uint16_t AcquerirPotentiometreDirection(void) {   // retourne une valeur : [ ? ; ? ]
-  uint16_t Aq_direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 31);             // à compléter
-  return Aq_direction;    // à compléter
+// Fonction pour obtenir la valeur du potentiomètre de la direction
+uint16_t AcquerirPotentiometreDirection(void) {   
+  uint16_t Aq_direction = map(analogRead(PotentiometreDirection_Pin), 0, 1024, 0, 31);  // Lit la valeur du potentiomètre de direction et la mappe sur une plage de 0 à 31
+  return Aq_direction;  // Retourne la valeur mappée
 }
 
-uint8_t AcquerirBoutonPoussoir() {                // retourne : 0 (BP relaché), 1 (BP enfoncé)
-   return(digitalRead(BoutonPoussoir_Pin));
+// Fonction pour obtenir l'état du bouton poussoir
+uint8_t AcquerirBoutonPoussoir() {
+  // Retourne 1 si le bouton est enfoncé, 0 si le bouton est relâché
+  if (digitalRead(BoutonPoussoir_Pin) == 1) {
+    return 0;  // Le bouton est relâché
+  } else {
+    return 1;  // Le bouton est enfoncé
+  }
 }
 
 
-// definition des fonctions de traitement
+// Définition des fonctions de traitement
+// Fonction pour calculer les données NEC à partir de la vitesse et de la direction
 uint8_t CalculerDonneeNEC(uint16_t Vitesse, uint16_t Direction) { 
-  static int Donnee[8] = {0};// retourne un octet (8 bits) : Vitesse sur les 3 MSB, Direction sur les 5 LSB 
-  int drctin = (Vitesse << 5) | (Direction & 0x1F);
+  static int Donnee[8] = {0};  // Tableau pour stocker les 8 bits de données
+  int drctin = (Vitesse << 5) | (Direction & 0x1F);  // Combine la vitesse et la direction dans une seule valeur (3 bits pour la vitesse et 5 bits pour la direction)
   for (int i = 7; i >= 0; i--) {
-    Donnee[i] = ((drctin >> i) & 1);
+    Donnee[i] = ((drctin >> i) & 1);  // Remplie le tableau Donnee avec les bits de la donnée calculée
   }
-  return Donnee ;    // à compléter+
+  return Donnee;  // Retourne les 8 bits sous forme de tableau (probablement à convertir en un octet plus tard)
 }
 
-// definition des fonctions de traitement
-uint8_t CalculerAdresseNEC(uint8_t Klaxon) { // retourne un octet (8 bits) : Klaxon sur le MSB, NumeroEquipe sur les 7 LSB
-  static int Adresse[8] = {0};
-  int adrss = (Klaxon << 7) | (NumeroEquipe & 0x7F);
+// Fonction pour calculer l'adresse NEC à partir de l'état du Klaxon et du numéro de l'équipe
+uint8_t CalculerAdresseNEC(uint8_t Klaxon) { 
+  static int Adresse[8] = {0};  // Tableau pour stocker les 8 bits de l'adresse
+  int adrss = (Klaxon << 7) | (NumeroEquipe & 0x7F);  // Combine l'état du Klaxon (1 bit) avec le numéro de l'équipe (7 bits)
   for (int i = 7; i >= 0; i--) {
-    Adresse[i] = ((adrss >> i) & 1);
+    Adresse[i] = ((adrss >> i) & 1);  // Remplie le tableau Adresse avec les bits de l'adresse calculée
   }
-  return Adresse ;   
+  return Adresse;  // Retourne l'adresse (probablement à convertir en un octet plus tard)
 }
 
-// definition des fonctions d'action
-                    // inclus dans la bibliothèque NEC
-void PiloterLedMarche(uint8_t etat){ //active ou non la LED marche/arret: 0 = éteint; 1 = allumé
-if (etat == 0){
-  digitalWrite(LEDMarche, LOW);
-}
-else{
-  digitalWrite(LEDMarche, HIGH);
-}
-  
-}
-void PiloterLedInfrarouge(uint8_t numer_led, char etat){
-
-
-for( int i; i<=8 ;i--){
-  int Sadresse[8] = CalculerAdresseNEC(Klaxon);
-  digitalWrite(LEDInfrarouge_Pin,Sadressse[i]);
-  delay();
-  digitalWrite(LEDInfrarouge_Pin,LOW);
-  delay();
-}
-for( int i; i<=8 ;i--){
-  int Sdonnee[8] = CalculerDonneeNEC(Vitesse,Direction) ;
-  digitalWrite(LEDInfrarouge_Pin,Sdonnee[i]);
-  delay();
-  digitalWrite(LEDInfrarouge_Pin,LOW);
-  delay();
-
-void PiloterBuzzer(uint16_t frequence){
-if (frequence<= 4100 || frequence >= 3900){
-  tone(Buzzer_Pin, frequence);        //ETEINDRE LE BUZZER DANS LE LOOP
-}
-}
-
-// definition des fonctions principales
+// Définition des fonctions principales
+// Fonction d'initialisation du système
 void setup(void) {
   Serial.begin(9600);
-// à compléter
+  pinMode(LEDInfrarouge_Pin,OUTPUT);// Initialise la communication série à 9600 bauds pour afficher des informations sur le moniteur série
+  // Cette section peut être utilisée pour initialiser d'autres paramètres comme les pins ou les périphériques
 }
 
+// Fonction principale appelée en boucle
 void loop(void) {
-  uint16_t Vitesse = AcquerirPotentiometreVitesse();
-  uint16_t Direction = AcquerirPotentiometreDirection();
-  uint8_t Klaxon = PiloterBuzzer(frequence);
-  uint8_t DonneeNEC =  CalculerDonneeNEC(Vitesse,Direction);
-  uint8_t AdresseNEC = CalculerAdresseNEC(Klaxon);
-//  ...             // à compléter
+  static uint_8t adresse_prec = 0x00;
+  uint16_t Vitesse = AcquerirPotentiometreVitesse();  // Lit la valeur du potentiomètre de la vitesse
+  uint16_t Direction = AcquerirPotentiometreDirection();  // Lit la valeur du potentiomètre de direction
+  uint8_t Klaxon = PiloterBuzzer(AcquerirBoutonPoussoir());  // Active le buzzer si le bouton poussoir est enfoncé
+  
+  uint8_t DonneeNEC = CalculerDonneeNEC(Vitesse, Direction);  // Calcule les données NEC en fonction de la vitesse et de la direction
+  uint8_t AdresseNEC = CalculerAdresseNEC(Klaxon);  // Calcule l'adresse NEC en fonction de l'état du Klaxon
+
+  // Récupère à nouveau les valeurs pour un traitement ou un affichage supplémentaire
+  Potentiometre_vitesse = AcquerirPotentiometreVitesse();  // Récupère la valeur du potentiomètre de vitesse
+  Potentiometre_direction = AcquerirPotentiometreDirection();  // Récupère la valeur du potentiomètre de direction
+  Bouton_poussoir = AcquerirBoutonPoussoir();  // Récupère l'état du bouton poussoir
+  
+  // Calcule à nouveau l'adresse et les données pour générer la trame NEC
+  uint8_t adresse = CalculerAdresseNEC(Klaxon);  // Calcule l'adresse (8 bits)
+  uint8_t donnee = CalculerDonneeNEC(Vitesse, Direction);  // Calcule les données (8 bits)
+  
+  if (adresse_prec == adresse){
+    delay(333);
+    GenererTrameNEC(17, adresse, donnee);
+  }
+  else{
+    delay(108);
+    GenererTrameNEC(17, adresse, donnee);
+  }
+  adresse_prec = adresse; // sauvegarde l'adresse précédente
+    // Envoie la trame NEC en utilisant les données et l'adresse calculées
+
 }
