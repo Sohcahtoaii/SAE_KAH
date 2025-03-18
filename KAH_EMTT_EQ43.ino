@@ -68,13 +68,20 @@ else{
 }
 void PiloterLedInfrarouge(uint8_t numer_led, char etat){
 
-if(etat == 0){
+
+for( int i; i<=8 ;i--){
+  int Sadresse[8] = CalculerAdresseNEC(Klaxon);
+  digitalWrite(LEDInfrarouge_Pin,Sadressse[i]);
+  delay();
   digitalWrite(LEDInfrarouge_Pin,LOW);
+  delay();
 }
-if(etat == 1){
-  digitalWrite(LEDInfrarouge_Pin,HIGH);
-}
-}
+for( int i; i<=8 ;i--){
+  int Sdonnee[8] = CalculerDonneeNEC(Vitesse,Direction) ;
+  digitalWrite(LEDInfrarouge_Pin,Sdonnee[i]);
+  delay();
+  digitalWrite(LEDInfrarouge_Pin,LOW);
+  delay();
 
 void PiloterBuzzer(uint16_t frequence){
 if (frequence<= 4100 || frequence >= 3900){
