@@ -12,8 +12,8 @@
 
 
 // definition des constantes du projet
-#define Servomoteur_Pin               5       // à modifier
-#define Moteur_Pin                    6       // à modifier
+#define Servomoteur_Pin              12
+#define Moteur_Pin                    5
 #define Buzzer_Pin                   11
 #define LedBleue_Pin                  4
 #define LedVerte_Pin                  6
