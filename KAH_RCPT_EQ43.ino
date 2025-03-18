@@ -1,8 +1,8 @@
 /*************************************************************************************************************************************/
 // Sujet :   Programme de l'émetteur du projet KAH                                                                                   //
-// Equipe :  xxxxxxx                                                                                                                    //
+// Equipe :  EQ43                                                                                                                //
 // Date :    xx/xx/xxxx                                                                                                              //
-// Version : x                                                                                                                  //
+// Version : 1                                                                                                                  //
 /*************************************************************************************************************************************/
 
 // inclusion des fichiers header des bibliothèques de fonctions Arduino
@@ -14,7 +14,7 @@
 // definition des constantes du projet
 #define Servomoteur_Pin               5       // à modifier
 #define Moteur_Pin                    6       // à modifier
-#define Buzzer_Pin                    8       // à modifier
+#define Buzzer_Pin                    11       // à modifier
 #define LedBleue_Pin                 10       // à modifier
 #define NumeroEquipe               0x52       // à modifier
 
@@ -60,8 +60,8 @@ void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
 }
 
 void PiloterBuzzer(uint8_t EtatBuzzer) { // génère un signal carré à 4kHz si EtatBuzzer = 1
-//  if (Buzzer_Pin == 1){ // à compléter
-// pwm.write // à compléter
+// if (EtatBuzzer == 1){ // à compléter
+// tone(4000)  // à compléter
 //  return ... ;    // à compléter
 }
 
