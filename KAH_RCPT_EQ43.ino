@@ -78,12 +78,8 @@ else {
 return;
 }
 
-void PiloterLedVerte(uint8_t EtatLedBleue) { // génère un signal binaire
-if (EtatLedBleue == 1){
-  digitalWrite(6,LOW);
-  }
-else {
-  digitalWrite(6,HIGH);
+void PiloterLedVerte(uint8_t EtatLedVerte) { // génère un signal binaire
+digitalWrite(6,LOW);
 return;
 }
 
