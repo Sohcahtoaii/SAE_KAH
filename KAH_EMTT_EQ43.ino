@@ -15,6 +15,7 @@
 #define PotentiometreDirection_Pin   A1       // à modifier
 #define BoutonPoussoir_Pin            8       // à modifier
 #define LEDInfrarouge_Pin             9       // à modifier
+#define Buzzer_Pin                           // à modifier
 #define NumeroEquipe               0x52       // à modifier
 
 
@@ -75,9 +76,9 @@ if(etat == 1){
 }
 }
 
-void piloterBuzzer(uint16_t frequence){
+void PiloterBuzzer(uint16_t frequence){
 if (frequence<= 4100 || frequence >= 3900){
-analogWrite(
+  tone(Buzzer_Pin, frequence);        //ETEINDRE LE BUZZER DANS LE LOOP
 }
 }
 
@@ -90,7 +91,7 @@ void setup(void) {
 void loop(void) {
   uint16_t Vitesse = AcquerirPotentiometreVitesse();
   uint16_t Direction = AcquerirPotentiometreDirection();
-  uint8_t Klaxon;
+  uint8_t Klaxon = PiloterBuzzer(frequence);
   uint8_t DonneeNEC =  CalculerDonneeNEC(Vitesse,Direction);
   uint8_t AdresseNEC = CalculerAdresseNEC(Klaxon);
 //  ...             // à compléter
