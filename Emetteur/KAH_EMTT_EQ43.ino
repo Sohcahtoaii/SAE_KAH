@@ -11,16 +11,17 @@
 #include "NEC.h"            // Inclusion d'un fichier d'entête spécifique au protocole NEC (probablement pour la gestion de l'envoi infrarouge NEC)
 
 // Définition des constantes du projet
-#define PotentiometreVitesse_Pin     A0       // Pin analogique A0 pour le potentiomètre de la vitesse (à modifier selon le câblage)
+#define PotentiometreVitesse_Pin     A0      // Pin analogique A0 pour le potentiomètre de la vitesse (à modifier selon le câblage)
 #define PotentiometreDirection_Pin   A1       // Pin analogique A1 pour le potentiomètre de la direction (à modifier selon le câblage)
 #define BoutonPoussoir_Pin           8        // Pin numérique 8 pour le bouton poussoir (à modifier si nécessaire)
-#define LEDInfrarouge_Pin            9        // Pin numérique 9 pour la LED infrarouge (à modifier selon la configuration du projet)
-#define NumeroEquipe                 0x52     // Identifiant unique de l'équipe (0x52 en hexadécimal, à personnaliser)
+#define LEDInfrarouge_Pin            11        // Pin numérique 9 pour la LED infrarouge (à modifier selon la configuration du projet)
+#define NumeroEquipe                 0x43     // Identifiant unique de l'équipe (0x52 en hexadécimal, à personnaliser)
 
 // Définition des fonctions d'acquisition
 // Fonction pour obtenir la valeur du potentiomètre de la vitesse
 uint16_t AcquerirPotentiometreVitesse(void) {     
-  return(analogRead(PotentiometreVitesse_Pin));  // Lit la valeur analogique sur la pin A0 et retourne la valeur lue (de 0 à 1023)
+  uint16_t Aq_vitesse = map(analogRead(PotentiometreVitesse_Pin), 0, 1024, 0, 7);
+  return Aq_vitesse;  // Lit la valeur analogique sur la pin A0 et retourne la valeur lue (de 0 à 1023)
 }
 
 // Fonction pour obtenir la valeur du potentiomètre de la direction
@@ -65,39 +66,37 @@ uint8_t CalculerAdresseNEC(uint8_t Klaxon) {
 // Fonction d'initialisation du système
 void setup(void) {
   Serial.begin(9600);
-  pinMode(Bouton_poussoir_Pin, INPUT_PULLUP);
   pinMode(LEDInfrarouge_Pin,OUTPUT);// Initialise la communication série à 9600 bauds pour afficher des informations sur le moniteur série
   // Cette section peut être utilisée pour initialiser d'autres paramètres comme les pins ou les périphériques
 }
 
 // Fonction principale appelée en boucle
 void loop(void) {
-  static uint_8t adresse_prec = 0x00;
+  static uint8_t donnee_prec = 0x00;
   uint16_t Vitesse = AcquerirPotentiometreVitesse();  // Lit la valeur du potentiomètre de la vitesse
-  uint16_t Direction = AcquerirPotentiometreDirection();  // Lit la valeur du potentiomètre de direction
-  uint8_t Klaxon = PiloterBuzzer(AcquerirBoutonPoussoir());  // Active le buzzer si le bouton poussoir est enfoncé
-  
-  uint8_t DonneeNEC = CalculerDonneeNEC(Vitesse, Direction);  // Calcule les données NEC en fonction de la vitesse et de la direction
-  uint8_t AdresseNEC = CalculerAdresseNEC(Klaxon);  // Calcule l'adresse NEC en fonction de l'état du Klaxon
-
-  // Récupère à nouveau les valeurs pour un traitement ou un affichage supplémentaire
-  Potentiometre_vitesse = AcquerirPotentiometreVitesse();  // Récupère la valeur du potentiomètre de vitesse
-  Potentiometre_direction = AcquerirPotentiometreDirection();  // Récupère la valeur du potentiomètre de direction
-  Bouton_poussoir = AcquerirBoutonPoussoir();  // Récupère l'état du bouton poussoir
-  
-  // Calcule à nouveau l'adresse et les données pour générer la trame NEC
+  uint16_t Direction = AcquerirPotentiometreDirection();  // Lit la valeur du potentiomètre de direction 
+  uint8_t Klaxon = AcquerirBoutonPoussoir();
   uint8_t adresse = CalculerAdresseNEC(Klaxon);  // Calcule l'adresse (8 bits)
+  Serial.print("adresse :");
+  Serial.println(adresse);
   uint8_t donnee = CalculerDonneeNEC(Vitesse, Direction);  // Calcule les données (8 bits)
-  
-  if (adresse_prec == adresse){
+  Serial.print("donnee :");
+  Serial.println(donnee);
+  if (donnee_prec == donnee){
     delay(333);
     GenererTrameNEC(17, adresse, donnee);
+    Serial.println("Envoyé avec un délai de 333ms");
   }
   else{
     delay(108);
     GenererTrameNEC(17, adresse, donnee);
+    Serial.println("Envoyé avec un délai de 108ms");
   }
-  adresse_prec = adresse; // sauvegarde l'adresse précédente
+  Serial.print("Donnee_prec : ");
+  Serial.println(donnee_prec);
+  Serial.print("Donnee : ");
+  Serial.println(donnee);
+  donnee_prec = donnee; // sauvegarde l'adresse précédente
     // Envoie la trame NEC en utilisant les données et l'adresse calculées
 
 }
