@@ -82,6 +82,7 @@ digitalWrite(6,LOW);
 
 // definition des fonctions principales
 void setup(void) {
+  Serial.begin(9600);
   pinMode (12,OUTPUT);
   pinMode (5,OUTPUT);
   pinMode (11,OUTPUT);
@@ -98,20 +99,35 @@ void loop(void) {
   uint8_t Erreur;
   uint8_t LedB;
   uint8_t Moteur;
-if (Adresse == AdresseNEC){
-  Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin,&Adresse,&Donnee);
-  if(Erreur == 0){ 
-    LedB = 1;
-    Moteur = 1;
+  //Mettre fonctions de traitement ICI//
+  if (Adresse == AdresseNEC){
+    Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin,&Adresse,&Donnee);
+    if(Erreur == 0){ 
+      LedB = 1;
+      Moteur = 1;
+    }
   }
-}
-else{
-  LedB = 0;
-  Moteur = 0;
-}
+  else{
+    LedB = 0;
+    Moteur = 0;
+  }
   PiloterServomoteur(Direction);
   PiloterMoteur(Vitesse);
   PiloterBuzzer(Klaxon);
   PiloterLedBleue(LedB);
   PiloterLedVerte(1);
+  Serial.print("Donnee: ");
+  Serial.println(Donnee); 
+  Serial.print("Adresse: ");
+  Serial.println(Adresse); 
+  Serial.print("Vitesse: ");
+  Serial.println(Vitesse); 
+  Serial.print("Direction: ");
+  Serial.println(Direction); 
+  Serial.print("Klaxon: ");
+  Serial.println(Klaxon); 
+  Serial.print("Erreur: ");
+  Serial.println(Erreur); 
+  Serial.print("Donnee: ");
+  Serial.println(Donnee); 
 }
