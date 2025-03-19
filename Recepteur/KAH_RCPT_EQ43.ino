@@ -99,6 +99,7 @@ void loop(void) {
   uint8_t Erreur;
   uint8_t LedB;
   uint8_t Moteur;
+  int T;
   //Mettre fonctions de traitement ICI//
   if (Adresse == AdresseNEC){
     Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin,&Adresse,&Donnee);
@@ -116,18 +117,17 @@ void loop(void) {
   PiloterBuzzer(Klaxon);
   PiloterLedBleue(LedB);
   PiloterLedVerte(1);
-  Serial.print("Donnee: ");
-  Serial.println(Donnee); 
-  Serial.print("Adresse: ");
-  Serial.println(Adresse); 
-  Serial.print("Vitesse: ");
-  Serial.println(Vitesse); 
-  Serial.print("Direction: ");
-  Serial.println(Direction); 
-  Serial.print("Klaxon: ");
-  Serial.println(Klaxon); 
-  Serial.print("Erreur: ");
-  Serial.println(Erreur); 
-  Serial.print("Donnee: ");
-  Serial.println(Donnee); 
+  if (millis() - T == 5000){
+    Serial.print("Donnee: ");
+    Serial.println(Donnee); 
+    Serial.print("Adresse: ");
+    Serial.println(Adresse); 
+    Serial.print("Vitesse: ");
+    Serial.println(Vitesse); 
+    Serial.print("Direction: ");
+    Serial.println(Direction); 
+    Serial.print("Klaxon: ");
+    Serial.println(Klaxon); 
+    Serial.print("Erreur: ");
+    Serial.println(Erreur);
 }
