@@ -51,12 +51,13 @@ uint8_t ExtraireEtatBuzzer(uint8_t Adresse) { // retourne : 0 (inactif), 1 (acti
 
 // definition des fonctions d'action
 void PiloterServomoteur(uint8_t Direction) { // génère un signal PWM
-//                  // à compléter
-//  return ... ;    // à compléter
+  analogWrite(Servomoteur_Pin,Direction);
+  return;
 }
 
 void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
   analogWrite(Moteur_Pin,Vitesse);
+  return;
 }
 
 void PiloterBuzzer(uint8_t EtatBuzzer) { // génère un signal carré à 4kHz si EtatBuzzer = 1
@@ -97,5 +98,9 @@ void loop(void) {
   uint8_t Vitesse;
   uint8_t Direction;
   uint8_t Klaxon;
-//  ...             // à compléter
+  PiloterServomoteur(Direction);
+  PiloterMoteur(Vitesse);
+  PiloterBuzzer(Klaxon);
+  PiloterLedBleue(LedB);
+  PiloterLedVerte(1);
 }
