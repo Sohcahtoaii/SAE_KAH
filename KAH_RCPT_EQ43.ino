@@ -56,8 +56,7 @@ void PiloterServomoteur(uint8_t Direction) { // génère un signal PWM
 }
 
 void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
-//  ...             // à compléter
-//  return ... ;    // à compléter
+  analogWrite(Moteur_Pin,Vitesse);
 }
 
 void PiloterBuzzer(uint8_t EtatBuzzer) { // génère un signal carré à 4kHz si EtatBuzzer = 1
@@ -85,7 +84,11 @@ return;
 
 // definition des fonctions principales
 void setup(void) {
-//  ...             // à compléter
+  pinMode (12,OUTPUT);
+  pinMode (5,OUTPUT);
+  pinMode (11,OUTPUT);
+  pinMode (4,OUTPUT);
+  pinMode (6,OUTPUT);
 }
 
 void loop(void) {
