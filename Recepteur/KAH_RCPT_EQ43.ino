@@ -94,6 +94,7 @@ void loop(void) {
   uint8_t Vitesse;
   uint8_t Direction;
   uint8_t Klaxon;
+  uint8_t Erreur;
   PiloterServomoteur(Direction);
   PiloterMoteur(Vitesse);
   PiloterBuzzer(Klaxon);
