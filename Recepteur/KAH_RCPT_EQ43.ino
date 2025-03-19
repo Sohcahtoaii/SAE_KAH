@@ -1,5 +1,5 @@
 /*************************************************************************************************************************************/
-// Sujet :   Programme de l'émetteur du projet KAH                                                                                   //
+// Sujet :   Programme du récepteur du projet KAH                                                                                   //
 // Equipe :  EQ43                                                                                                                //
 // Date :    19/03/2025                                                                                                              //
 // Version : 1                                                                                                                  //
