@@ -51,8 +51,7 @@ uint8_t ExtraireEtatBuzzer(uint8_t Adresse) { // retourne : 0 (inactif), 1 (acti
 
 // definition des fonctions d'action
 void PiloterServomoteur(uint8_t Direction) { // génère un signal PWM
-//                  // à compléter
-//  return ... ;    // à compléter
+  analogWrite(Servomoteur_Pin,Direction);
 }
 
 void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
@@ -65,21 +64,19 @@ if (EtatBuzzer == 1){
   }
 else {
   noTone();
-return;
 }
 
 void PiloterLedBleue(uint8_t EtatLedBleue) { // génère un signal binaire
 if (EtatLedBleue == 1){
   digitalWrite(4,LOW);
+  delay(333);
   }
 else {
   digitalWrite(4,HIGH);
-return;
 }
 
 void PiloterLedVerte(uint8_t EtatLedVerte) { // génère un signal binaire
 digitalWrite(6,LOW);
-return;
 }
 
 // definition des fonctions principales
@@ -97,5 +94,9 @@ void loop(void) {
   uint8_t Vitesse;
   uint8_t Direction;
   uint8_t Klaxon;
-//  ...             // à compléter
+  PiloterServomoteur(Direction);
+  PiloterMoteur(Vitesse);
+  PiloterBuzzer(Klaxon);
+  PiloterLedBleue(LedB);
+  PiloterLedVerte(1);
 }
