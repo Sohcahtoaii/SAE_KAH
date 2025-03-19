@@ -54,7 +54,8 @@ void PiloterServomoteur(uint8_t Direction) { // génère un signal PWM
   analogWrite(Servomoteur_Pin,Direction);
 }
 
-void PiloterMoteur(uint8_t Vitesse) { // génère un signal PWM
+void PiloterMoteur(uint8_t Vitesse, uint8_t EtatMoteur) { // génère un signal PWM
+  if (EtatMoteur == 1)
   analogWrite(Moteur_Pin,Vitesse);
 }
 
@@ -95,9 +96,21 @@ void loop(void) {
   uint8_t Direction;
   uint8_t Klaxon;
   uint8_t Erreur;
+  uint8_t LedB;
+  uint8_t Moteur;
+if (Adresse == AdresseNEC){
+  Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin,&Adresse,&Donnee);
+  if(Erreur == 0){ 
+    LedB = 1;
+    Moteur = 1;
+  }
+}
+else{
+  LedB = 0;
+  Moteur = 0;
+}
   PiloterServomoteur(Direction);
   PiloterMoteur(Vitesse);
   PiloterBuzzer(Klaxon);
   PiloterLedBleue(LedB);
   PiloterLedVerte(1);
-}
