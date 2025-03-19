@@ -17,7 +17,7 @@
 #define Buzzer_Pin                   11
 #define LedBleue_Pin                  4
 #define LedVerte_Pin                  6
-#define NumeroEquipe               0x43       // à modifier
+#define NumeroEquipe               0x43
 
 
 
