@@ -107,14 +107,13 @@ void loop(void) {  // Fonction principale qui s'exécute en boucle
   unsigned long T1; // Variable pour stocker un timer pour la gestion de la trame correcte
 
   // Acquisition et traitement des données infrarouges
-  if (Adresse == AdresseNEC) {  // Si l'adresse reçue correspond à l'adresse du récepteur
-    Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin, &Adresse, &Donnee);  // Acquérir la trame infrarouge
-    if (Erreur == 0) {  // Si l'acquisition de la trame est réussie
-      LedB = 1;  // Allumer la LED bleue
-      Moteur = 1;  // Activer le moteur
-      T1 = millis();  // Remise à zéro du timer de trame correcte
-    }
-  } else {
+  Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin, &Adresse, &Donnee);  // Acquérir la trame infrarouge
+  if (Erreur == 0 & Adresse == AdresseNEC) {  // Si l'acquisition de la trame est réussie et l'adresse reçue correspond à l'adresse du récepteur
+    LedB = 1;  // Allumer la LED bleue
+    Moteur = 1;  // Activer le moteur
+    T1 = millis();  // Remise à zéro du timer de trame correcte
+  }
+  else {
     // Si aucune trame correcte n'a été reçue dans les 333ms
     if (millis() - T1 == 333) {
       LedB = 0;  // Éteindre la LED bleue
@@ -122,6 +121,7 @@ void loop(void) {  // Fonction principale qui s'exécute en boucle
       T1 = millis();  // Remise à zéro du timer
     }
   }
+}
 
   // Appel des fonctions pour piloter les composants
   PiloterServomoteur(Direction);  // Piloter le servomoteur
