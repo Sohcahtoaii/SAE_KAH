@@ -107,10 +107,10 @@ void loop(void) {
       LedB = 1;
       Moteur = 1;
     }
-  }
-  else{
+    else{
     LedB = 0;
     Moteur = 0;
+    }
   }
   PiloterServomoteur(Direction);
   PiloterMoteur(Vitesse);
@@ -130,4 +130,5 @@ void loop(void) {
     Serial.println(Klaxon); 
     Serial.print("Erreur: ");
     Serial.println(Erreur);
+}
 }
