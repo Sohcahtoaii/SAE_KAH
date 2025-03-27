@@ -6,22 +6,19 @@
 /*************************************************************************************************************************************/
 
 // inclusion des fichiers header des bibliothèques de fonctions Arduino
-#include <stdint.h>
-#include <arduino.h>
-#include "NEC.h"
-
+#include <stdint.h>    // Inclut les types de données standard comme uint8_t
+#include <arduino.h>   // Bibliothèque standard pour Arduino
+#include "NEC.h"       // Inclusion d'une bibliothèque spécifique pour l'interface infrarouge NEC
 
 // definition des constantes du projet
-#define Servomoteur_Pin              12
-#define Moteur_Pin                    5
-#define Buzzer_Pin                   11
-#define LedBleue_Pin                  4
-#define LedVerte_Pin                  6
-#define NumeroEquipe               0x43
+#define Servomoteur_Pin              12     // Pin où le servomoteur est connecté
+#define Moteur_Pin                    5      // Pin où le moteur est connecté
+#define Buzzer_Pin                   11     // Pin où le buzzer est connecté
+#define LedBleue_Pin                  4     // Pin pour la LED bleue
+#define LedVerte_Pin                  6     // Pin pour la LED verte
+#define NumeroEquipe               0x43     // Adresse de l'équipe (peut être utilisée pour identifier l'équipe)
 
-
-
-// definition des fonctions d'acquisition
+// Définition des fonctions d'acquisition (elles sont importées depuis la bibliothèque NEC)
                     // inclus dans la bibliothèque NEC
 
 
@@ -49,80 +46,99 @@ void PiloterServomoteur(uint8_t Direction) {
   analogWrite(Servomoteur_Pin,Direction);
 }
 
-void PiloterMoteur(uint8_t Vitesse, uint8_t EtatMoteur) { // génère un signal PWM
-  if (EtatMoteur == 1)
-  analogWrite(Moteur_Pin,Vitesse);
-}
-
-void PiloterBuzzer(uint8_t EtatBuzzer) { // génère un signal carré à 4kHz si EtatBuzzer = 1
-if (EtatBuzzer == 1){
-  tone(11,4000);
+void PiloterMoteur(uint8_t Vitesse, uint8_t EtatMoteur) { // Contrôle le moteur en fonction de sa vitesse et de son état
+  if (EtatMoteur == 1){  // Si le moteur est ordonné d'être actif
+    analogWrite(Moteur_Pin, Vitesse);  // Envoie un signal PWM pour définir la vitesse
   }
-else {
-  noTone();
+    else{
+      analogWrite(Moteur_Pin,0);
+    }
 }
 
-void PiloterLedBleue(uint8_t EtatLedBleue) { // génère un signal binaire
-if (EtatLedBleue == 1){
-  digitalWrite(4,LOW);
-  delay(333);
+
+
+void PiloterBuzzer(uint8_t EtatBuzzer) { // Contrôle l'état du buzzer
+  if (EtatBuzzer == 1) {  // Si le buzzer doit être actif
+    tone(11, 4000);   // Génère un signal carré à 4kHz sur la pin 11 (buzzer)
+  } 
+  else {
+    noTone();    // Arrête le buzzer si l'état est 0
   }
-else {
-  digitalWrite(4,HIGH);
 }
 
-void PiloterLedVerte(uint8_t EtatLedVerte) { // génère un signal binaire
-digitalWrite(6,LOW);
+void PiloterLedBleue(uint8_t EtatLedBleue) {  // Contrôle l'état de la LED bleue
+  if (EtatLedBleue == 1) {  // Si la LED bleue doit être allumée
+    digitalWrite(4, LOW);   // Allume la LED bleue
+  } 
+  else {
+    digitalWrite(4, HIGH);  // Éteint la LED bleue
+  }
 }
 
-// definition des fonctions principales
-void setup(void) {
-  Serial.begin(9600);
-  pinMode (12,OUTPUT);
-  pinMode (5,OUTPUT);
-  pinMode (11,OUTPUT);
-  pinMode (4,OUTPUT);
-  pinMode (6,OUTPUT);
+void PiloterLedVerte(uint8_t EtatLedVerte) {  // Contrôle l'état de la LED verte
+  digitalWrite(6, LOW);   // Allume la LED verte (LOW sur la pin 6)
 }
 
-void loop(void) {
-  uint8_t Donnee;
-  uint8_t Adresse;
-  uint8_t Vitesse;
-  uint8_t Direction;
-  uint8_t Klaxon;
-  uint8_t Erreur;
-  uint8_t LedB;
-  uint8_t Moteur;
-  int T;
-  //Mettre fonctions de traitement ICI//
-  if (Adresse == AdresseNEC){
-    Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin,&Adresse,&Donnee);
-    if(Erreur == 0){ 
-      LedB = 1;
-      Moteur = 1;
+// Définition des fonctions principales
+
+void setup(void) {  // Fonction d'initialisation qui s'exécute une seule fois au démarrage
+  Serial.begin(9600);  // Initialisation de la communication série pour afficher des informations de débogage
+  pinMode(12, OUTPUT);  // Configuration de la pin 12 comme une sortie pour le servomoteur
+  pinMode(5, OUTPUT);   // Configuration de la pin 5 comme une sortie pour le moteur
+  pinMode(11, OUTPUT);  // Configuration de la pin 11 comme une sortie pour le buzzer
+  pinMode(4, OUTPUT);   // Configuration de la pin 4 comme une sortie pour la LED bleue
+  pinMode(6, OUTPUT);   // Configuration de la pin 6 comme une sortie pour la LED verte
+}
+
+void loop(void) {  // Fonction principale qui s'exécute en boucle
+  uint8_t Donnee;  // Variable pour stocker les données reçues
+  uint8_t Adresse; // Variable pour stocker l'adresse des données
+  uint8_t Vitesse; // Variable pour stocker la vitesse du moteur
+  uint8_t Direction; // Variable pour stocker la direction du servomoteur
+  uint8_t Klaxon;   // Variable pour stocker l'état du buzzer (Klaxon)
+  uint8_t Erreur;   // Variable pour stocker l'état de l'acquisition des données
+  uint8_t LedB;     // Variable pour l'état de la LED bleue
+  uint8_t Moteur;   // Variable pour l'état du moteur
+  unsigned long T;  // Variable pour stocker un timer pour l'affichage périodique
+  unsigned long T1; // Variable pour stocker un timer pour la gestion de la trame correcte
+
+  // Acquisition et traitement des données infrarouges
+  Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin, &Adresse, &Donnee);  // Acquérir la trame infrarouge
+  if (Erreur == 0 & Adresse == AdresseNEC) {  // Si l'acquisition de la trame est réussie et l'adresse reçue correspond à l'adresse du récepteur
+    LedB = 1;  // Allumer la LED bleue
+    Moteur = 1;  // Activer le moteur
+    T1 = millis();  // Remise à zéro du timer de trame correcte
+  }
+  else {
+    // Si aucune trame correcte n'a été reçue dans les 333ms
+    if (millis() - T1 == 333) {
+      LedB = 0;  // Éteindre la LED bleue
+      Moteur = 0;  // Désactiver le moteur
+      T1 = millis();  // Remise à zéro du timer
     }
   }
-  else{
-    LedB = 0;
-    Moteur = 0;
-  }
-  PiloterServomoteur(Direction);
-  PiloterMoteur(Vitesse);
-  PiloterBuzzer(Klaxon);
-  PiloterLedBleue(LedB);
-  PiloterLedVerte(1);
-  if (millis() - T == 5000){
-    Serial.print("Donnee: ");
-    Serial.println(Donnee); 
-    Serial.print("Adresse: ");
-    Serial.println(Adresse); 
-    Serial.print("Vitesse: ");
-    Serial.println(Vitesse); 
-    Serial.print("Direction: ");
-    Serial.println(Direction); 
-    Serial.print("Klaxon: ");
-    Serial.println(Klaxon); 
-    Serial.print("Erreur: ");
+}
+
+  // Appel des fonctions pour piloter les composants
+  PiloterServomoteur(Direction);  // Piloter le servomoteur
+  PiloterMoteur(Vitesse, Moteur); // Piloter le moteur
+  PiloterBuzzer(Klaxon);         // Piloter le buzzer
+  PiloterLedBleue(LedB);         // Piloter la LED bleue
+  PiloterLedVerte(1);            // Allumer la LED verte
+
+  // Affichage des données sur le moniteur série toutes les 5 secondes
+  if (millis() - T == 5000) {
+    Serial.print("Donnee: ");  // Afficher la donnée
+    Serial.println(Donnee);
+    Serial.print("Adresse: ");  // Afficher l'adresse
+    Serial.println(Adresse);
+    Serial.print("Vitesse: ");  // Afficher la vitesse
+    Serial.println(Vitesse);
+    Serial.print("Direction: "); // Afficher la direction
+    Serial.println(Direction);
+    Serial.print("Klaxon: ");    // Afficher l'état du klaxon
+    Serial.println(Klaxon);
+    Serial.print("Erreur: ");    // Afficher l'état d'erreur
     Serial.println(Erreur);
+  }
 }
