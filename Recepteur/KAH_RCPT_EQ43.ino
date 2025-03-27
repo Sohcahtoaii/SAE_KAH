@@ -23,22 +23,30 @@
 
 
 uint8_t ExtraireNumeroEquipe(uint8_t Adresse) { // retourne une valeur : [ ? ; ? ]
-         
-  return ... ;    
+    int NumeroEquipe = Adresse & 0x43;  // Masque pour extraire les 4 bits de poids faible
+    return NumeroEquipe;  // Retourne le numéro de l'équipe
+     
 
-// definition des fonctions de traitement
+// efinition des fonctions de traitement
 uint8_t CalculerDirectionServomoteur(uint8_t Donnee) { 
-
+uint8_t direction = Donnee & 0x1F;  // Masque pour extraire les 5 bits de direction
+direction=map(direction, 0 ,, toLow, toHigh);
+  return direction;  // Retourne la direction du servomoteur
 }
 
 // definition des fonctions de traitement
 uint8_t CalculerVitesseMoteur(uint8_t Donnee) { 
-  
+  Donnee = Donnee >>>5;  // Décalage de 5 bits vers la droite pour extraire les 3 bits de vitesse
+  uint8_t speed= map(Donnee, 0, 7, 0, 180);
+  return speed;  // Retourne la vitesse du moteur
 }
 
 // definition des fonctions de traitement
 uint8_t ExtraireEtatBuzzer(uint8_t Adresse) { 
+  int EtatBuzzer = (Adresse >> 7);  // Décalage de 7 bits vers la droite pour extraire l'état du buzzer
+  return EtatBuzzer;  // Retourne l'état du buzzer
 }
+
 
 
 // definition des fonctions d'action
