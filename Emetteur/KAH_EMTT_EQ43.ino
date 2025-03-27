@@ -15,7 +15,7 @@
 #define PotentiometreDirection_Pin   A1       // Pin analogique A1 pour le potentiomètre de la direction (à modifier selon le câblage)
 #define BoutonPoussoir_Pin           8        // Pin numérique 8 pour le bouton poussoir (à modifier si nécessaire)
 #define LEDInfrarouge_Pin            11        // Pin numérique 9 pour la LED infrarouge (à modifier selon la configuration du projet)
-#define NumeroEquipe                 0x43     // Identifiant unique de l'équipe (0x52 en hexadécimal, à personnaliser)
+#define NumeroEquipe                 0x2B     // Identifiant unique de l'équipe (0x52 en hexadécimal, à personnaliser)
 
 // Définition des fonctions d'acquisition
 // Fonction pour obtenir la valeur du potentiomètre de la vitesse
