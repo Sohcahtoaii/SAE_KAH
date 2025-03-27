@@ -24,33 +24,28 @@
 // definition des fonctions d'acquisition
                     // inclus dans la bibliothèque NEC
 
-// definition des fonctions de traitement
+
 uint8_t ExtraireNumeroEquipe(uint8_t Adresse) { // retourne une valeur : [ ? ; ? ]
-//  ...             // à compléter
-//  return ... ;    // à compléter
+         
+  return ... ;    
+
+// definition des fonctions de traitement
+uint8_t CalculerDirectionServomoteur(uint8_t Donnee) { 
+
 }
 
 // definition des fonctions de traitement
-uint8_t CalculerDirectionServomoteur(uint8_t Donnee) { // retourne une valeur : [ ? ; ? ]
-//  ...             // à compléter
-//  return ... ;    // à compléter
+uint8_t CalculerVitesseMoteur(uint8_t Donnee) { 
+  
 }
 
 // definition des fonctions de traitement
-uint8_t CalculerVitesseMoteur(uint8_t Donnee) { // retourne une valeur : [ ? ; ? ]
-//  ...             // à compléter
-//  return ... ;    // à compléter
-}
-
-// definition des fonctions de traitement
-uint8_t ExtraireEtatBuzzer(uint8_t Adresse) { // retourne : 0 (inactif), 1 (actif)
-//  ...             // à compléter
-//  return ... ;    // à compléter
+uint8_t ExtraireEtatBuzzer(uint8_t Adresse) { 
 }
 
 
 // definition des fonctions d'action
-void PiloterServomoteur(uint8_t Direction) { // génère un signal PWM
+void PiloterServomoteur(uint8_t Direction) { 
   analogWrite(Servomoteur_Pin,Direction);
 }
 
