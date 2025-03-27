@@ -102,7 +102,8 @@ void loop(void) {  // Fonction principale qui s'exécute en boucle
   unsigned long T;  // Variable pour stocker un timer pour l'affichage périodique
   unsigned long T1; // Variable pour stocker un timer pour la gestion de la trame correcte
 
-  // Acquisition et traitement des données infrarouges
+  // METTRE FONCTIONS DE TRAITEMENT ICI//
+  
   Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin, &Adresse, &Donnee);  // Acquérir la trame infrarouge
   if (Erreur == 0 & Adresse == AdresseNEC) {  // Si l'acquisition de la trame est réussie et l'adresse reçue correspond à l'adresse du récepteur
     LedB = 1;  // Allumer la LED bleue
