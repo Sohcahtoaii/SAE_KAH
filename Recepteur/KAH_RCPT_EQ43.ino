@@ -25,6 +25,25 @@ Servo moteur;   // Servomoteur pour la propulsion
 
 // Définition des fonctions
 
+//Contrôle la validité de la trame
+void ValiditéTrameNEC() {
+  // Acquisition de la trame infrarouge NEC
+  int8_t Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin, &Adresse, &Donnee);
+  // Vérifie si la trame est valide et si l'adresse correspond à celle de l'équipe
+  if (Erreur == 0 && Adresse == NumeroEquipe) { 
+    Vitesse = CalculerVitesseMoteur(Donnee); // Extrait la vitesse
+    Direction = CalculerDirectionServomoteur(Donnee); // Extrait la direction
+    Klaxon = ExtraireEtatBuzzer(Adresse); // Vérifie si le buzzer doit être activé
+    LedB = 1; // Active la LED bleue
+    Moteur = 1; // Active le moteur
+    T1 = millis(); // Réinitialise le timer de sécurité
+  } 
+  else if (millis() - T1 >= 333) { // Si aucune trame correcte reçue depuis plus de 333 ms
+    Sécurité(); // Active la sécurité
+    T1 = millis(); // Réinitialise le timer
+  }
+}
+
 // Extrait le numéro d'équipe à partir de l'adresse reçue
 uint8_t ExtraireNumeroEquipe(uint8_t Adresse) {
   return Adresse & 0x7F; // Extrait les 7 bits de poids faible pour obtenir le numéro d'équipe
@@ -96,23 +115,6 @@ void loop() {
   uint8_t Adresse = 0, Donnee = 0;  // Variables pour stocker l'adresse et les données reçues
   uint8_t Vitesse = 0, Direction = 0, Klaxon = 0, LedB = 0, Moteur = 0; // Variables de contrôle des actionneurs
   static unsigned long T1 = 0, T = 0; // Variables pour gérer le temps
-
-  // Acquisition de la trame infrarouge NEC
-  int8_t Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin, &Adresse, &Donnee);
-
-  // Vérifie si la trame est valide et si l'adresse correspond à celle de l'équipe
-  if (Erreur == 0 && Adresse == NumeroEquipe) { 
-    Vitesse = CalculerVitesseMoteur(Donnee); // Extrait la vitesse
-    Direction = CalculerDirectionServomoteur(Donnee); // Extrait la direction
-    Klaxon = ExtraireEtatBuzzer(Adresse); // Vérifie si le buzzer doit être activé
-    LedB = 1; // Active la LED bleue
-    Moteur = 1; // Active le moteur
-    T1 = millis(); // Réinitialise le timer de sécurité
-  } 
-  else if (millis() - T1 >= 333) { // Si aucune trame correcte reçue depuis plus de 333 ms
-    Sécurité(); // Active la sécurité
-    T1 = millis(); // Réinitialise le timer
-  }
 
   // Contrôle des actionneurs
   PiloterServomoteur(Direction); // Applique la direction au servomoteur
