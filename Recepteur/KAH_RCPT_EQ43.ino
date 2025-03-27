@@ -9,7 +9,7 @@
 #include <stdint.h>    // Inclut les types de données standard comme uint8_t
 #include <arduino.h>   // Bibliothèque standard pour Arduino
 #include "NEC.h"       // Inclusion d'une bibliothèque spécifique pour l'interface infrarouge NEC
-
+#include <Servo.h>     // Inclusion de la bibliothèque pour le contrôle du servomoteur
 // definition des constantes du projet
 #define Servomoteur_Pin              12     // Pin où le servomoteur est connecté
 #define Moteur_Pin                    5      // Pin où le moteur est connecté
@@ -23,7 +23,7 @@
 
 
 uint8_t ExtraireNumeroEquipe(uint8_t Adresse) { // retourne une valeur : [ ? ; ? ]
-    int NumeroEquipe = Adresse & 0x43;  // Masque pour extraire les 4 bits de poids faible
+    int NumeroEquipe = Adresse & NumeroEquipe;  // Masque pour extraire les 4 bits de poids faible
     return NumeroEquipe;  // Retourne le numéro de l'équipe
      
 
