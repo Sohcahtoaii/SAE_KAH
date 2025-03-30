@@ -22,7 +22,9 @@
 // Objets globaux
 Servo myservo;  // Servomoteur pour la direction
 Servo moteur;   // Servomoteur pour la propulsion
-
+uint8_t Adresse = 0, Donnee = 0;  // Variables pour stocker l'adresse et les données reçues
+uint8_t Vitesse = 0, Direction = 0, Klaxon = 0, LedB = 0, Moteur = 0; // Variables de contrôle des actionneurs
+static unsigned long T1 = 0, T = 0; // Variables pour gérer le temps
 // Définition des fonctions
 
 //Contrôle la validité de la trame
@@ -112,10 +114,8 @@ void setup() {
 }
 
 void loop() {
-  uint8_t Adresse = 0, Donnee = 0;  // Variables pour stocker l'adresse et les données reçues
-  uint8_t Vitesse = 0, Direction = 0, Klaxon = 0, LedB = 0, Moteur = 0; // Variables de contrôle des actionneurs
-  static unsigned long T1 = 0, T = 0; // Variables pour gérer le temps
-
+  
+  ValiditéTrameNEC(); // Vérifie la validité de la trame infrarouge et lance le traitement si valide
   // Contrôle des actionneurs
   PiloterServomoteur(Direction); // Applique la direction au servomoteur
   PiloterMoteur(Vitesse, Moteur); // Applique la vitesse au moteur
