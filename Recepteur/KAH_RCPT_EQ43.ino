@@ -18,6 +18,8 @@
 #define LedVerte_Pin 6              // Broche de la LED verte
 #define NumeroEquipe 0x2B           // Numéro d'équipe (67 en décimal)
 #define RECEPTEUR_INFRAROUGE_Pin 2  // Broche du récepteur infrarouge
+#define TimingMinPWM         1000  // definition du temps (en us) a l'etat haut de la commande du servomoteur correspondant a un angle de 0 degres
+#define TimingMaxPWM         2000  // definition du temps (en us) a l'etat haut de la commande du servomoteur correspondant a un angle de 180 degres
 
 // Objets globaux
 Servo myservo;  // Servomoteur pour la direction
@@ -28,11 +30,11 @@ static unsigned long T1 = 0, T = 0; // Variables pour gérer le temps
 // Définition des fonctions
 
 //Contrôle la validité de la trame
-void ValiditéTrameNEC() {
+void ValiditeTrameNEC() {
   // Acquisition de la trame infrarouge NEC
   int8_t Erreur = AcquerirTrameNEC(RECEPTEUR_INFRAROUGE_Pin, &Adresse, &Donnee);
   // Vérifie si la trame est valide et si l'adresse correspond à celle de l'équipe
-  if (Erreur == 0 && Adresse == NumeroEquipe) { 
+  if (Erreur == 0 && ExtraireNumeroEquipe(Adresse) == NumeroEquipe) { 
     Vitesse = CalculerVitesseMoteur(Donnee); // Extrait la vitesse
     Direction = CalculerDirectionServomoteur(Donnee); // Extrait la direction
     Klaxon = ExtraireEtatBuzzer(Adresse); // Vérifie si le buzzer doit être activé
@@ -41,7 +43,8 @@ void ValiditéTrameNEC() {
     T1 = millis(); // Réinitialise le timer de sécurité
   } 
   else if (millis() - T1 >= 333) { // Si aucune trame correcte reçue depuis plus de 333 ms
-    Sécurité(); // Active la sécurité
+    Securite();
+    Moteur = 0; // Active la sécurité
     T1 = millis(); // Réinitialise le timer
   }
 }
@@ -98,7 +101,7 @@ void LedIndicateur(uint8_t EtatLedVerte) {
 }
 
 // Fonction de sécurité en cas d'absence de signal valide
-void Sécurité() {
+void Securite() {
   PiloterMoteur(0, 0); // Arrête le moteur
   PiloterLedBleue(0);  // Éteint la LED bleue
   Serial.println("Sécurité activée : moteur arrêté");
@@ -106,8 +109,8 @@ void Sécurité() {
 
 void setup() {
   Serial.begin(9600); // Initialisation de la communication série
-  myservo.attach(Servomoteur_Pin); // Attache le servomoteur à la broche définie
-  moteur.attach(Moteur_Pin);       // Attache le moteur à la broche définie
+  myservo.attach(Servomoteur_Pin,TimingMinPWM,TimingMaxPWM); // Attache le servomoteur à la broche définie
+  moteur.attach(Moteur_Pin,TimingMinPWM,TimingMaxPWM);       // Attache le moteur à la broche définie
   pinMode(Buzzer_Pin, OUTPUT);     // Définit le buzzer en sortie
   pinMode(LedBleue_Pin, OUTPUT);   // Définit la LED bleue en sortie
   pinMode(LedVerte_Pin, OUTPUT);   // Définit la LED verte en sortie
@@ -115,28 +118,11 @@ void setup() {
 
 void loop() {
   
-  ValiditéTrameNEC(); // Vérifie la validité de la trame infrarouge et lance le traitement si valide
+  ValiditeTrameNEC(); // Vérifie la validité de la trame infrarouge et lance le traitement si valide
   // Contrôle des actionneurs
   PiloterServomoteur(Direction); // Applique la direction au servomoteur
   PiloterMoteur(Vitesse, Moteur); // Applique la vitesse au moteur
   PiloterBuzzer(Klaxon); // Active/désactive le klaxon
   PiloterLedBleue(LedB); // Active/désactive la LED bleue
   LedIndicateur(1); // Allume la LED verte pour indiquer que le système fonctionne
-
-  // Affichage des données toutes les 5 secondes
-  if (millis() - T >= 5000) {
-    Serial.print("Donnee: ");
-    Serial.println(Donnee);
-    Serial.print("Adresse: ");
-    Serial.println(Adresse);
-    Serial.print("Vitesse: ");
-    Serial.println(Vitesse);
-    Serial.print("Direction: ");
-    Serial.println(Direction);
-    Serial.print("Klaxon: ");
-    Serial.println(Klaxon);
-    Serial.print("Erreur: ");
-    Serial.println(Erreur);
-    T = millis(); // Réinitialise le timer d'affichage
-  }
 }
