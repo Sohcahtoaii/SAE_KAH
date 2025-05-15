@@ -8,13 +8,13 @@
 // 2 fonctions sont fournies dans cette bibliotheque NEC :                                                                           //
 //                                                                                                                                   //
 //   => fonction d'emission d'une trame NEC                                                                                          //
-//     syntaxe : void GenererTrameNEC(int Broche, uint8_t Adresse, uint8_t Donnee);                                      //
+//     syntaxe : void GenererTrameNEC(int Broche, uint8_t Adresse, uint8_t Donnee);                                                  //
 //          Broche est la valeur de la broche Arduino sur laquelle est connectee la LED d'émission infrarouge                        //
 //          Adresse est la valeur de l'adresse NEC à transmettre dans la trame NEC                                                   //
 //          Donnee est la valeur de la donnee NEC à transmettre dans la trame NEC                                                    //
 //                                                                                                                                   //
 //   => fonction de reception d'une trame NEC                                                                                        //
-//     syntaxe : int8_t AcquerirTrameNEC(int Broche, uint8_t* Adresse, uint8_t* Donnee);                                   //
+//     syntaxe : int8_t AcquerirTrameNEC(int Broche, uint8_t* Adresse, uint8_t* Donnee);                                             //
 //          AcquerirTrameNEC retourne une valeur d'erreur (0 : trame NEC valide ; -1 : erreur de reception NEC ; -2 : trame absente) //
 //          Broche est la valeur de la broche Arduino sur laquelle est connectee le recepteur infrarouge                             //
 //          *Adresse retourne la valeur de l'adresse NEC incluse dans la trame NEC recue (passage de la valeur par pointeur)         //
