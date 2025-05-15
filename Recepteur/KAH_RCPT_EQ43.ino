@@ -11,13 +11,13 @@
 #include <Servo.h> // Bibliothèque pour contrôler les servomoteurs
 
 // Définition des constantes
-#define Servomoteur_Pin 12          // Broche du servomoteur de direction
-#define Moteur_Pin 5                // Broche du servomoteur de propulsion
-#define Buzzer_Pin 11               // Broche du buzzer
-#define LedBleue_Pin 4              // Broche de la LED bleue
-#define LedVerte_Pin 6              // Broche de la LED verte
-#define NumeroEquipe 0x2B           // Numéro d'équipe (67 en décimal)
-#define RECEPTEUR_INFRAROUGE_Pin 2  // Broche du récepteur infrarouge
+#define Servomoteur_Pin 6          // Broche du servomoteur de direction
+#define Moteur_Pin 3                // Broche du servomoteur de propulsion
+#define Buzzer_Pin 5            // Broche du buzzer
+#define LedBleue_Pin 2              // Broche de la LED bleue
+#define LedVerte_Pin 4              // Broche de la LED verte
+#define NumeroEquipe 0x43     // Numéro d'équipe (67 en décimal)
+#define RECEPTEUR_INFRAROUGE_Pin 11  // Broche du récepteur infrarouge
 #define TimingMinPWM         1000  // definition du temps (en us) a l'etat haut de la commande du servomoteur correspondant a un angle de 0 degres
 #define TimingMaxPWM         2000  // definition du temps (en us) a l'etat haut de la commande du servomoteur correspondant a un angle de 180 degres
 
@@ -92,18 +92,20 @@ void PiloterBuzzer(uint8_t EtatBuzzer) {
 
 // Contrôle l'état de la LED bleue
 void PiloterLedBleue(uint8_t EtatLedBleue) {
-  digitalWrite(LedBleue_Pin, EtatLedBleue ? LOW : HIGH); // Active (LOW) ou désactive (HIGH) la LED bleue
+  digitalWrite(LedBleue_Pin, EtatLedBleue ? HIGH : LOW); // Active (LOW) ou désactive (HIGH) la LED bleue
 }
 
 // Allume la LED verte pour indiquer que le système fonctionne
 void LedIndicateur(uint8_t EtatLedVerte) {
-  digitalWrite(LedVerte_Pin, EtatLedVerte ? LOW : HIGH);
+  digitalWrite(LedVerte_Pin, EtatLedVerte ? HIGH : LOW);
 }
 
 // Fonction de sécurité en cas d'absence de signal valide
 void Securite() {
   PiloterMoteur(0, 0); // Arrête le moteur
-  PiloterLedBleue(0);  // Éteint la LED bleue
+  PiloterLedBleue(0);
+  LedB=0; 
+  digitalWrite(LedBleue_Pin,LOW);// Éteint la LED bleue
   Serial.println("Sécurité activée : moteur arrêté");
 }
 
@@ -114,6 +116,7 @@ void setup() {
   pinMode(Buzzer_Pin, OUTPUT);     // Définit le buzzer en sortie
   pinMode(LedBleue_Pin, OUTPUT);   // Définit la LED bleue en sortie
   pinMode(LedVerte_Pin, OUTPUT);   // Définit la LED verte en sortie
+  digitalWrite(LedVerte_Pin,HIGH); 
 }
 
 void loop() {
