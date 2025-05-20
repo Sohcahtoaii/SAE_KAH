@@ -13,9 +13,10 @@
 // Définition des constantes du projet
 #define PotentiometreVitesse_Pin     A0      // Pin analogique A0 pour le potentiomètre de la vitesse (à modifier selon le câblage)
 #define PotentiometreDirection_Pin   A1       // Pin analogique A1 pour le potentiomètre de la direction (à modifier selon le câblage)
-#define BoutonPoussoir_Pin           8        // Pin numérique 8 pour le bouton poussoir (à modifier si nécessaire)
+#define BoutonPoussoir_Pin           9        // Pin numérique 8 pour le bouton poussoir 
 #define LEDInfrarouge_Pin            11        // Pin numérique 9 pour la LED infrarouge (à modifier selon la configuration du projet)
-#define NumeroEquipe                 0x2B     // Identifiant unique de l'équipe (0x52 en hexadécimal, à personnaliser)
+#define LEDverte                      A5       // Pin numérique 9 pour la LED infrarouge
+#define NumeroEquipe                 0x43    // Identifiant unique de l'équipe (0x52 en hexadécimal, à personnaliser)
 
 // Définition des fonctions d'acquisition
 // Fonction pour obtenir la valeur du potentiomètre de la vitesse
@@ -67,6 +68,9 @@ uint8_t CalculerAdresseNEC(uint8_t Klaxon) {
 void setup(void) {
   Serial.begin(9600);
   pinMode(LEDInfrarouge_Pin,OUTPUT);// Initialise la communication série à 9600 bauds pour afficher des informations sur le moniteur série
+  pinMode(LEDverte,OUTPUT);//
+  digitalWrite(LEDverte, HIGH);
+  
   // Cette section peut être utilisée pour initialiser d'autres paramètres comme les pins ou les périphériques
 }
 
@@ -96,6 +100,8 @@ void loop(void) {
   Serial.println(donnee_prec);
   Serial.print("Donnee : ");
   Serial.println(donnee);
+  Serial.print("Vitesse : ");
+  Serial.println(Vitesse);
   donnee_prec = donnee; // sauvegarde l'adresse précédente
     // Envoie la trame NEC en utilisant les données et l'adresse calculées
 
