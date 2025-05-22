@@ -77,7 +77,7 @@ void setup(void) {
 
 // Fonction principale appelée en boucle
 void loop(void) {
-  static int t1 = 0;
+  static unsigned long t1 = millis();
   static uint8_t donnee_prec = 0x00;
   
   uint16_t Vitesse = AcquerirPotentiometreVitesse();  // Lit la valeur du potentiomètre de la vitesse
@@ -103,7 +103,7 @@ void loop(void) {
       donnee_prec = donnee;  // Mettre à jour uniquement après envoi
     }
   }
-}
+
   Serial.print("Donnee_prec : ");
   Serial.println(donnee_prec);
   Serial.print("Donnee : ");
