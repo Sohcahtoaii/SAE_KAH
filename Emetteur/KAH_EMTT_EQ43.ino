@@ -111,7 +111,4 @@ void loop(void) {
   Serial.print("Klaxon : ");
   Serial.println(Klaxon);
   Serial.println(digitalRead(BoutonPoussoir_Pin));
-  donnee_prec = donnee; // sauvegarde l'adresse précédente
-    // Envoie la trame NEC en utilisant les données et l'adresse calculées
-
 }
