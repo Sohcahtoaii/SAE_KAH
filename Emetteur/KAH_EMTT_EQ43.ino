@@ -77,7 +77,9 @@ void setup(void) {
 
 // Fonction principale appelée en boucle
 void loop(void) {
+  static int t1 = 0;
   static uint8_t donnee_prec = 0x00;
+  
   uint16_t Vitesse = AcquerirPotentiometreVitesse();  // Lit la valeur du potentiomètre de la vitesse
   uint16_t Direction = AcquerirPotentiometreDirection();  // Lit la valeur du potentiomètre de direction 
   uint8_t Klaxon = AcquerirBoutonPoussoir();
@@ -87,16 +89,21 @@ void loop(void) {
   uint8_t donnee = CalculerDonneeNEC(Vitesse, Direction);  // Calcule les données (8 bits)
   Serial.print("donnee :");
   Serial.println(donnee);
-  if (donnee_prec == donnee){
-    delay(333);
-    GenererTrameNEC(11, adresse, donnee);
-    Serial.println("Envoyé avec un délai de 333ms");
+   if (donnee == donnee_prec) {
+    if (millis() - t1 >= 333) {
+      GenererTrameNEC(11, adresse, donnee);
+      Serial.println("Envoyé avec un délai de 333ms");
+      t1 = millis();
+    }
+  } else {
+    if (millis() - t1 >= 108) {
+      GenererTrameNEC(11, adresse, donnee);
+      Serial.println("Envoyé avec un délai de 108ms");
+      t1 = millis();
+      donnee_prec = donnee;  // Mettre à jour uniquement après envoi
+    }
   }
-  else{
-    delay(108);
-    GenererTrameNEC(11, adresse, donnee);
-    Serial.println("Envoyé avec un délai de 108ms");
-  }
+}
   Serial.print("Donnee_prec : ");
   Serial.println(donnee_prec);
   Serial.print("Donnee : ");
