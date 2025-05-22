@@ -70,6 +70,7 @@ void setup(void) {
   pinMode(LEDInfrarouge_Pin,OUTPUT);// Initialise la communication série à 9600 bauds pour afficher des informations sur le moniteur série
   pinMode(LEDverte,OUTPUT);//
   digitalWrite(LEDverte, HIGH);
+  pinMode(9,INPUT_PULLUP);
   
   // Cette section peut être utilisée pour initialiser d'autres paramètres comme les pins ou les périphériques
 }
@@ -88,20 +89,21 @@ void loop(void) {
   Serial.println(donnee);
   if (donnee_prec == donnee){
     delay(333);
-    GenererTrameNEC(17, adresse, donnee);
+    GenererTrameNEC(11, adresse, donnee);
     Serial.println("Envoyé avec un délai de 333ms");
   }
   else{
     delay(108);
-    GenererTrameNEC(17, adresse, donnee);
+    GenererTrameNEC(11, adresse, donnee);
     Serial.println("Envoyé avec un délai de 108ms");
   }
   Serial.print("Donnee_prec : ");
   Serial.println(donnee_prec);
   Serial.print("Donnee : ");
   Serial.println(donnee);
-  Serial.print("Vitesse : ");
-  Serial.println(Vitesse);
+  Serial.print("Klaxon : ");
+  Serial.println(Klaxon);
+  Serial.println(digitalRead(BoutonPoussoir_Pin));
   donnee_prec = donnee; // sauvegarde l'adresse précédente
     // Envoie la trame NEC en utilisant les données et l'adresse calculées
 
